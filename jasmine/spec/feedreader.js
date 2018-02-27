@@ -32,10 +32,11 @@ $(function() {
              var loopStop = allFeeds.length;
              for (loop = 0; loop < loopStop; loop++) {
                   expect(allFeeds[loop].url).toBeDefined();
-                  expect(allFeeds[loop].url).not.toBe('');
-                  expect(allFeeds[loop].url).toContain('http');
-                  expect(allFeeds[loop].url).toContain('://');
-                  expect(allFeeds[loop].url).toContain('.');
+                  // url validator https://gist.github.com/dperini/729294
+                  // create a regular expression and test the URL against the expression
+                  // thanks to advice from Udacity on pointing this out
+                  let validURL = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/i;
+                  expect(validURL.test(allFeeds[loop].url)).toBe(true);
              }
         });
 
@@ -77,6 +78,7 @@ $(function() {
          afterEach(function() {
             //Update the bodyClassInitial value to current value before the next test
             if(bodyClassChangedTo !== undefined) {
+                 // update the bodyClassBeforeTest to show get the current value after toggle tests
                  bodyClassInitial = bodyClassChangedTo;
             }
 
@@ -85,10 +87,12 @@ $(function() {
         /* Make sure the menu is hidden upon page load.  The hidding of the menu
          * is enabled by setting the body class to menu-hidden.  It is later turned
          * on/made visible by removing the class value.  This test is a simple
-         * check to see if the class is menu-hidden.
+         * check to see if the class is menu-hidden.  I use the includes function
+         * to allow for the possibility of multiple classes being assigned.
+         *
          */
          it('Menu is hidden on page load', function() {
-              expect(bodyClassInitial).toBe('menu-hidden');
+              expect(bodyClassInitial.includes('menu-hidden')).toBe(true);
          });
 
 
