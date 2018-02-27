@@ -6,6 +6,21 @@ This project demonstrates the ability to perform unit testing on a already funct
 web-based application.  The application, in this example, is a menu of URL feeds derived from Google API calls.
 Each URL feed is essentially a category of feeds that are retrieved from the Google RSS API.
 
+To implement Jasmine standalone, the web page to be tested must have at the bottom of the <head> section...
+
+          <link rel="stylesheet" href="jasmine/lib/jasmine-2.1.2/jasmine.css">
+          <script src="jasmine/lib/jasmine-2.1.2/jasmine.js"></script>
+          <script src="jasmine/lib/jasmine-2.1.2/jasmine-html.js"></script>
+          <script src="jasmine/lib/jasmine-2.1.2/boot.js"></script>
+
+     At the end of the body tag, include a script with your tests.  In my case I used...
+
+           <script src="jasmine/spec/feedreader.js"></script>
+
+After that, to run the tests all you have to do is load the page to be tested in your browser.
+The results will be displayed at the bottom of the web page below the tested content.
+
+
 ## Project Tasks
 
      * Review application to understand function and possible test points
