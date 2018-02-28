@@ -29,15 +29,14 @@ $(function() {
          * valid URL
          */
         it('A URL is defined for all feeds', function() {
-             var loopStop = allFeeds.length;
-             for (loop = 0; loop < loopStop; loop++) {
-                  expect(allFeeds[loop].url).toBeDefined();
+             allFeeds.forEach(function(element) {
+                  expect(element.url).toBeDefined();
                   // url validator https://gist.github.com/dperini/729294
                   // create a regular expression and test the URL against the expression
                   // thanks to advice from Udacity on pointing this out
                   let validURL = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/i;
-                  expect(validURL.test(allFeeds[loop].url)).toBe(true);
-             }
+                  expect(validURL.test(element.url)).toBe(true);
+             });
         });
 
 
@@ -46,44 +45,15 @@ $(function() {
          * to create the menu buttons so the user can select the desired feed list
          */
          it('A name is defined for all feeds', function() {
-             var loopStop = allFeeds.length;
-             for (loop = 0; loop < loopStop; loop++) {
-                  expect(allFeeds[loop].name).toBeDefined();
-                  expect(allFeeds[loop].name).not.toBe('');
-             }
+              allFeeds.forEach(function(element) {
+                  expect(element.name).toBeDefined();
+                  expect(element.name).not.toBe('');
+              });
         });
     });
 
     /* Menu checks */
     describe('The menu', function() {
-         var bodyClassInitial, bodyClassChangedTo, menuIcon, spyEvent, detectEvent;
-
-         beforeAll(function() {
-             // event with type and custom function to see if it was called
-             // create an event object with a function that does nothing.  This will allow
-             //  the spy to detect firing of the function.
-             spyEvent = {
-                  type: 'click',
-                  eventFunction: function() {
-                  }
-             };
-
-             // setup the spy object.  The spyOn parms are object, string
-             detectEvent = spyOn(spyEvent, 'eventFunction');
-
-             // get page load value for body class
-             bodyClassInitial = $('body').attr('class');
-         });
-
-         afterEach(function() {
-            //Update the bodyClassInitial value to current value before the next test
-            if(bodyClassChangedTo !== undefined) {
-                 // update the bodyClassBeforeTest to show get the current value after toggle tests
-                 bodyClassInitial = bodyClassChangedTo;
-            }
-
-         });
-
         /* Make sure the menu is hidden upon page load.  The hidding of the menu
          * is enabled by setting the body class to menu-hidden.  It is later turned
          * on/made visible by removing the class value.  This test is a simple
@@ -92,7 +62,7 @@ $(function() {
          *
          */
          it('Menu is hidden on page load', function() {
-              expect(bodyClassInitial.includes('menu-hidden')).toBe(true);
+              expect($('body').hasClass('menu-hidden')).toBe(true);
          });
 
 
@@ -104,12 +74,20 @@ $(function() {
           * value at the time of the next loop or test.
           */
           it('Menu toggles', function() {
-               //loop trhough test twice to make sure value changes through cycle
+               // get before test state of class assignment of 'menu-hidden'
+               var boolToggle = $('body').hasClass('menu-hidden');
+               // create a click listener for the test
+               $('.menu-icon-link').click(function() {
+                    // toogle should change the true/false value of .hasClass('menu-hidden')
+                    expect($('body').hasClass('menu-hidden')).not.toBe(boolToggle);
+               });
+
+               //loop trhough test twice to make sure toggle works in on and off
                for (loop = 0; loop < 2; loop++) {
-                    // trigger spyEvent to simulate clicking menu Icon
-                    $('.menu-icon-link').trigger(spyEvent);
-                    // test to see if hidden class is toggled from previous value
-                    expect(bodyClassInitial).not.toBe(bodyClassChangedTo);
+                    // trigger a click to change class assignment
+                    $('.menu-icon-link').trigger('click');
+                    // move current true/false value after first test/flip to boolToggle
+                    boolToggle = $('body').hasClass('menu-hidden');
                }
           });
     });
