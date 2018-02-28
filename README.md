@@ -47,12 +47,13 @@ The results will be displayed at the bottom of the web page below the tested con
           - Checking for hidden is just a simple check to see if the class was
                set to the hidden values
           - Checking for the toggle between a hidden and visible states required
-               a Jasmine spy to see the calls to change the class value.  I
-               simulated clicking the menu icon by triggering a click event and
-               then testing to see if the state had changed.
-
-               $('.menu-icon-link').trigger(spyEvent);
-               expect(bodyClassInitial).not.toBe(bodyClassChangedTo);
+               I first pulled the true/false value of the menu class assignment
+               to see if the menu is visible or not.  Next I add a click listener
+               containing the expectation that the click will change the true/false
+               value of the class assignment.  Then I loop and automated click
+               event to check the expectation of the class assignment.  Looping
+               through at least twice will simulate changing states to a new on/off
+               state and then back to the original state again.
 
      * Initial Feed Entry tests
           - This test just took a count of the number of entries in the Feed and
